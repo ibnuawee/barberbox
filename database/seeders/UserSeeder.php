@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'ibnugaming@gmail.com',
             'email_verified_at' => now(),
-            'role' => 'superadmin',
+            'role' => 'admin',
             'password' => Hash::make('password')
         ]);
 
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'ibnuarifin@gmail.com',
             'email_verified_at' => now(),
-            'role' => 'admin',
+            'role' => 'barber',
             'password' => Hash::make('password')
         ]);
     }
