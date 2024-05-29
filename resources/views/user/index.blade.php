@@ -5,7 +5,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>User List</h1>
+        <h1>List User</h1>
         <div class="section-header-button">
             <a href="{{route('user.create')}}" class="btn btn-primary">Add User</a>
           </div>
