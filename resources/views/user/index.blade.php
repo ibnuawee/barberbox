@@ -6,6 +6,9 @@
 <section class="section">
     <div class="section-header">
         <h1>User List</h1>
+        <div class="section-header-button">
+            <a href="{{route('user.create')}}" class="btn btn-primary">Add User</a>
+          </div>
     </div>
 
     <div class="section-body">
@@ -20,6 +23,14 @@
                         <h4>All Posts</h4>
                     </div>
                     <div class="card-body">
+                        <div class="float-left">
+                            <select class="form-control selectric">
+                              <option>Action For Selected</option>
+                              <option>Move to Draft</option>
+                              <option>Move to Pending</option>
+                              <option>Delete Pemanently</option>
+                            </select>
+                          </div>
                         <div class="float-right">
                             <form method="GET">
                                 <div class="input-group">
