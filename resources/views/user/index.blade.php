@@ -51,6 +51,7 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
+                                    <th>Role</th>
                                     <th>Status</th>
                                 
                                 @forelse ($users as $index => $user)
@@ -76,6 +77,9 @@
                                     </td>
                                     <td>
                                         {{$user->phone}}
+                                    </td>
+                                    <td>
+                                        {{$user->role}}
                                     </td>
                                     <td>
                                         @if ($user->email_verified_at != null)

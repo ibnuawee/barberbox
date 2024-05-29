@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     public static $permision = [
-        'dashboard' => ['admin', 'user'],
+        'dashboard' => ['barber', 'user'],
         'index-user' => [],
     ];
     /**
@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         // });
 
         Gate::before(function(User $user){
-            if($user->role === 'superadmin'){
+            if($user->role === 'admin'){
                 return true;
             }
         });
