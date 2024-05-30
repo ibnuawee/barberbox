@@ -34,6 +34,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function barber()
+    {
+        return $this->hasOne(Barber::class, 'user_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

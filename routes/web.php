@@ -7,7 +7,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('landingpage.index');
 });
 
 Route::middleware(['auth', 'verified'])->group(function(){
@@ -26,13 +26,17 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 
-    Route::get('/barbers', [BarberController::class, 'index'])->name('barbers.index');
+    Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
+    Route::get('/barber/available-schedule', [BookingController::class, 'availableSchedule'])->name('barber.availableSchedule');
 
-    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/create', [BookingController::class, 'create'])->name('bookings.create');
-    Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
-
-    Route::get('/barbers/create', [BarberController::class, 'create'])->name('barbers.create');
-    Route::post('/barbers', [BarberController::class, 'store'])->name('barbers.store');
+    // Route untuk barber
+        Route::middleware(['auth', 'can:barber'])->group(function () {
+            // Tambahkan route untuk fitur barber di sini
+            Route::get('/barber', [BarberController::class, 'index'])->name('barber.index');
+            Route::post('/barber/set-schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
+            Route::post('/barber/set-price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
+        });
 
 });

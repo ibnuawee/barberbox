@@ -9,14 +9,20 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'barber_id',
-        'booking_time',
-    ];
+    protected $fillable = ['user_id', 'barber_id', 'service_id', 'haircut_name', 'booking_date', 'gender', 'status', 'invoice_number', 'total_price'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function barber()
     {
         return $this->belongsTo(Barber::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 }
