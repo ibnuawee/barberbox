@@ -2,34 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Barber;
-use App\Models\User;
+use App\Models\Schedule;
+use App\Models\Booking;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BarberController extends Controller
 {
-    //
     public function index()
     {
-        $barbers = Barber::all();
-        return view('barbers.index', compact('barbers'));
+        $bookings = Booking::where('barber_id', Auth::user()->barber->id)->get();
+        return view('barbers.index', compact('bookings'));
     }
 
-    public function create()
-{
-    return view('barbers.create');
-}
+    public function setSchedule(Request $request)
+    {
+        $validated = $request->validate([
+            'available_date' => 'required|date|after:now',
+        ]);
 
-public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-    ]);
+        $barber = Auth::user()->barber;
+        Schedule::create([
+            'barber_id' => $barber->id,
+            'available_date' => $validated['available_date'],
+        ]);
 
-    Barber::create([
-        'name' => $request->name,
-    ]);
+        return back();
+    }
 
-    return redirect()->route('barbers.index')->with('success', 'Barber added successfully');
-}
+    public function setPrice(Request $request)
+    {
+        $validated = $request->validate([
+            'price' => 'required|numeric',
+        ]);
+
+        $barber = Auth::user()->barber;
+        $barber->price = $validated['price'];
+        $barber->save();
+
+        return back();
+    }
 }

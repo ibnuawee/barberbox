@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Barber;
 use App\Models\Booking;
 use App\Models\User;
+use App\Models\Schedule;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,29 +15,50 @@ class BookingController extends Controller
     //
     public function create()
     {
-        $barbers = Barber::all();
-        return view('bookings.create', compact('barbers'));
+        $services = Service::all();
+        $barbers = Barber::with('user')->get();
+        return view('bookings.create', compact('services', 'barbers'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
+            'service_id' => 'required|exists:services,id',
             'barber_id' => 'required|exists:barbers,id',
-            'booking_time' => 'required|date|after:now',
+            'haircut_name' => 'required|string',
+            'booking_date' => 'required|date|after:now',
+            'gender' => 'required|string|in:pria,wanita',
         ]);
 
-        Booking::create([
+        $booking = Booking::create([
             'user_id' => Auth::id(),
-            'barber_id' => $request->barber_id,
-            'booking_time' => $request->booking_time,
+            'barber_id' => $validated['barber_id'],
+            'service_id' => $validated['service_id'],
+            'haircut_name' => $validated['haircut_name'],
+            'booking_date' => $validated['booking_date'],
+            'gender' => $validated['gender'],
+            'status' => 'pending',
+            'invoice_number' => strtoupper(uniqid('INV-')),
+            'total_price' => Barber::find($validated['barber_id'])->price,
         ]);
 
-        return redirect()->route('bookings.index')->with('success', 'Booking successfully created');
+        return redirect()->route('booking.show', $booking->id);
     }
 
-    public function index()
+    public function show(Booking $booking)
     {
-        $bookings = Booking::where('user_id', Auth::id())->get();
-        return view('bookings.index', compact('bookings'));
+        return view('bookings.show', compact('booking'));
+    }
+
+    public function availableSchedule(Request $request)
+    {
+        $schedules = Schedule::where('barber_id', $request->barber_id)
+            ->whereNotIn('available_date', function($query) use ($request) {
+                $query->select('booking_date')
+                      ->from('bookings')
+                      ->where('barber_id', $request->barber_id);
+            })->get();
+
+        return response()->json($schedules);
     }
 }

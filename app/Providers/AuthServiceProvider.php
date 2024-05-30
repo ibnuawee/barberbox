@@ -11,6 +11,8 @@ class AuthServiceProvider extends ServiceProvider
     public static $permision = [
         'dashboard' => ['barber', 'user'],
         'index-user' => [],
+        'booking' => ['user'],
+        'barber' => ['barber'],
     ];
     /**
      * Register services.
@@ -30,6 +32,14 @@ class AuthServiceProvider extends ServiceProvider
         //     if($user->role == 'superadmin' || $user->role == 'admin'){
         //         return true;
         //     }
+        // });
+
+        // Gate::define('booking', function(User $user){
+        //     return $user->role === 'user';
+        // });
+        
+        // Gate::define('barber', function(User $user){
+        //     return $user->role === 'barber';
         // });
 
         Gate::before(function(User $user){
