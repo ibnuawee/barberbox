@@ -32,11 +32,12 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/barber/available-schedule', [BookingController::class, 'availableSchedule'])->name('barber.availableSchedule');
 
     // Route untuk barber
-        Route::middleware(['auth', 'can:barber'])->group(function () {
-            // Tambahkan route untuk fitur barber di sini
-            Route::get('/barber', [BarberController::class, 'index'])->name('barber.index');
-            Route::post('/barber/set-schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
-            Route::post('/barber/set-price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
-        });
+        
+    // Tambahkan route untuk fitur barber di sini
+    Route::get('/barber', [BarberController::class, 'index'])->name('barber.index');
+    Route::get('/barber/schedule', [BarberController::class, 'schedule'])->name('barber.schedule');
+    Route::post('/barber/set-schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
+    Route::post('/barber/schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
+    Route::post('/barber/set-price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
 
 });

@@ -11,8 +11,10 @@ class AuthServiceProvider extends ServiceProvider
     public static $permision = [
         'dashboard' => ['barber', 'user'],
         'index-user' => [],
-        'booking' => ['user'],
-        'barber' => ['barber'],
+        'booking' => ['barber,user'],
+        'barber-booking' => ['barber'],
+        'barber-schedule' => ['barber'],
+        'barber-Setschedule' => ['barber'],
     ];
     /**
      * Register services.
