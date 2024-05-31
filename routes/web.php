@@ -10,6 +10,10 @@ Route::get('/', function () {
     return view('landingpage.index');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
 Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('home', function(){
         return view('dashboard.home');

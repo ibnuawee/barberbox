@@ -111,13 +111,16 @@
     <div class="header-bottom" data-header>
       <div class="container">
         <div class="logo-container">
-          <img src="/asset/images/Logo.png" width="150" height="150" alt="Logo">
+          <img src="/asset2/images/Logo.png" width="150" height="150" alt="Logo">
         </div>
   
         <nav class="navbar container" data-navbar>
           <ul class="navbar-list">
             <li class="navbar-item">
               <a href="#home" class="navbar-link" data-nav-link>Home</a>
+            </li>
+            <li class="navbar-item">
+              <a href="#" class="navbar-link" data-nav-link>Feature</a>
             </li>
             <li class="navbar-item">
               <a href="#services" class="navbar-link" data-nav-link>Services</a>
@@ -131,9 +134,6 @@
             <li class="navbar-item">
               <a href="#appointment" class="navbar-link" data-nav-link>Appointment</a>
             </li>
-            <li class="navbar-item">
-              <a href="#" class="navbar-link" data-nav-link>Contact</a>
-            </li>
           </ul>
         </nav>
   
@@ -141,8 +141,8 @@
           <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
         </button>
   
-        <a href="#" class="btn has-before">
-          <span class="span">Appointment</span>
+        <a href="{{route('login')}}" class="btn has-before">
+          <span class="span">Login</span>
           <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
         </a>
       </div>
@@ -164,7 +164,7 @@
         style="background-image: url('./asset2/images/hero-banner.jpg')">
         <div class="container">
 
-          <h1 class="h1 hero-title">Barbers & Hair Cutting</h1>
+          <h1 class="h1 hero-title">HEY, THERE GET READY FOR THE FRESH HAIRCUT</h1>
 
           <p class="hero-text">
             Sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
