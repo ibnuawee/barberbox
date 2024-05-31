@@ -22,6 +22,17 @@
             <a href="{{route('user.index')}}" class="nav-link"><i class="fas fa-users"></i><span>User List</span></a>
         </li>
         @endcan
+        @can('barber-booking')
+        <li class="nav-item dropdown">
+            <a href="{{route('barber.index')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Booking</span></a>
+        </li>
+        @endcan
+
+        @can('barber-schedule')
+        <li class="nav-item dropdown">
+            <a href="{{route('barber.setSchedule')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Jadwal</span></a>
+        </li>
+        @endcan
         @show
     </ul>
 
