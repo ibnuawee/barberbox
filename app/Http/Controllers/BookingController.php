@@ -9,6 +9,8 @@ use App\Models\Schedule;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -30,6 +32,9 @@ class BookingController extends Controller
             'gender' => 'required|string|in:pria,wanita',
         ]);
 
+        $barber = Barber::findOrFail($validated['barber_id']);
+        $service = $barber->services()->where('service_id', $validated['service_id'])->first();
+
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'barber_id' => $validated['barber_id'],
@@ -39,7 +44,7 @@ class BookingController extends Controller
             'gender' => $validated['gender'],
             'status' => 'pending',
             'invoice_number' => strtoupper(uniqid('INV-')),
-            'total_price' => Barber::find($validated['barber_id'])->price,
+            'total_price' => $service->pivot->price,
         ]);
 
         return redirect()->route('booking.show', $booking->id);
@@ -61,4 +66,29 @@ class BookingController extends Controller
 
         return response()->json($schedules);
     }
+
+    public function availableServices(Request $request)
+{
+    try {
+        DB::enableQueryLog(); // Enable query logging
+
+        $barber = Barber::with(['services' => function($query) use ($request) {
+            $query->select('services.id', 'services.name', 'barber_service.price as price')
+                  ->join('barber_service as bs', 'services.id', '=', 'bs.service_id')
+                  ->where('bs.barber_id', $request->barber_id);
+        }])->find($request->barber_id);
+
+        Log::info(DB::getQueryLog()); // Log the query
+
+        if ($barber) {
+            return response()->json($barber->services);
+        }
+
+        return response()->json([]);
+    } catch (\Exception $e) {
+        Log::error('Error fetching available services: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+}
+
 }

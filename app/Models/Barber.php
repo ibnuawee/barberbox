@@ -9,7 +9,7 @@ use App\Models\workSchedule;
 class Barber extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'price'];
+    protected $fillable = ['user_id'];
 
     public function user()
     {
@@ -24,5 +24,10 @@ class Barber extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'barber_service')->withPivot('price');
     }
 }

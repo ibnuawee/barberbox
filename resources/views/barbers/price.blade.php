@@ -9,11 +9,6 @@
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Posts</h2>
-        <p class="section-lead">
-            You can manage all posts, such as editing, deleting and more.
-        </p>
-        
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
@@ -22,12 +17,22 @@
                     </div>
                     <div class="card-body">
                         <div class="float-left">
-                                <form action="{{ route('barber.setSchedule') }}" method="POST">
+                            <form method="POST" action="{{ route('barber.setPrice') }}">
                                 @csrf
-                                    <label for="available_date">Tanggal dan Jam Tersedia:</label>
-                                    <input type="datetime-local" name="available_date" id="available_date" required>
-                                    <button type="submit">Set</button>
-                                </form>
+                                <div class="form-group">
+                                    <label for="service_id">Service</label>
+                                    <select name="service_id" id="service_id" class="form-control" required>
+                                        @foreach($allservices as $allservice)
+                                            <option value="{{ $allservice->id }}">{{ $allservice->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <input type="number" name="price" id="price" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Set Price</button>
+                            </form>
 
                           </div>
                         <div class="float-right">
@@ -47,21 +52,25 @@
                             <table class="table table-striped">
                                 <tr>
                                     <th>No</th>
-                                    <th>Jadwal Tersedia</th>
+                                    <th>Service</th>
+                                    <th>Harga</th>
                                 
-                                @forelse ($schedules as $index => $schedule)
+                                @forelse ($services as $index => $service)
                                 <tr>
                                     <td>
-                                        {{$index + $schedules->firstItem()}}
+                                        {{$index + $services->firstItem()}}
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($schedule->available_date)->locale('id')->translatedFormat('l, d F Y H:i') }}
+                                        {{ $service->name }}
+                                    </td>
+                                    <td>
+                                        Rp. {{ $service->pivot->price }}
                                     </td>
                                 </tr>
                                 @empty
                                     <tr>
                                         <td>
-                                            Jadwal Kosong
+                                            Service Kosong
                                         </td>
                                     </tr>
                                 @endforelse
@@ -71,7 +80,7 @@
                         <div class="float-right">
                             <nav>
                                 <ul class="pagination">
-                                    {{$schedules->withQueryString()->links()}}
+                                    {{$services->withQueryString()->links()}}
                                 </ul>
                             </nav>
                         </div>

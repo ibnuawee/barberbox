@@ -18,7 +18,7 @@
                 
             <div class="col-12 col-md-12 col-lg-7">
                 <div class="card">
-                    <form method="POST" action="{{route('user.update', $users->id)}}" class="needs-validation" novalidate="">
+                    <form method="POST" action="{{route('user.update', $user->id)}}">
                         @csrf
                         @method('PUT')
                         
@@ -29,7 +29,7 @@
                             <div class="row">
                                 <div class="form-group col-12">
                                     <label>Name</label>
-                                    <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{$users->name}}">
+                                    <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{old('name', $user->name)}}">
                                     @error('name')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -41,7 +41,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6 col-12">
                                     <label>Email</label>
-                                    <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{$users->email}}">
+                                    <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{old('email', $user->email)}}">
                                     @error('email')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="form-group col-md-6 col-12">
                                     <label>Phone</label>
-                                    <input name="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" value="{{$users->phone}}">
+                                    <input name="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" value="{{old('phone', $user->phone)}}">
                                     @error('phone')
                                         <div class="invalid-feedback">
                                             {{$message}}
@@ -63,8 +63,8 @@
                                 <div class="form-group col-3">
                                   <label>Role</label>
                                     <select name="role" id="role" class="form-control">
-                                        <option value="user" {{ $users->role === 'user' ? 'selected' : '' }}>User</option>
-                                        <option value="barber" {{ $users->role === 'barber' ? 'selected' : '' }}>Barber</option>
+                                        <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>User</option>
+                                        <option value="barber" {{ old('role', $user->role) === 'barber' ? 'selected' : '' }}>Barber</option>
                                     </select>
                                     @error('phone')
                                         <div class="invalid-feedback">
