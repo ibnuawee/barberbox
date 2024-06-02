@@ -33,6 +33,13 @@
             <a href="{{route('barber.setSchedule')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Jadwal</span></a>
         </li>
         @endcan
+
+        @can('barber-price')
+        <li class="nav-item dropdown">
+            <a href="{{route('barber.setPrice')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Harga</span></a>
+        </li>
+        @endcan
+
         @show
     </ul>
 

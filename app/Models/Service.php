@@ -9,4 +9,9 @@ class Service extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+
+    public function barbers()
+    {
+        return $this->belongsToMany(Barber::class, 'barber_service')->withPivot('price');
+    }
 }

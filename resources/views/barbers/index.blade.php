@@ -5,9 +5,8 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>List User</h1>
+        <h1>List Booking</h1>
         <div class="section-header-button">
-            <a href="" class="btn btn-primary">Add User</a>
           </div>
     </div>
 
@@ -60,15 +59,15 @@
                                     <td>
                                         {{$index + $bookings->firstItem()}}
                                     </td>
-                                    <td>{{$booking->user_id}}
+                                    <td>
+                                        {{$booking->invoice_number}}
+                                    </td>
+                                    <td>{{$booking->user->name}}
                                         <div class="table-links">
                                             <div class="bullet"></div>
                                             <a href="">Edit</a>
                                             <div class="bullet"></div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        {{$booking->invoice_number}}
                                     </td>
                                     <td>
                                         {{$booking->haircut_name}}
@@ -77,16 +76,34 @@
                                         {{$booking->gender}}
                                     </td>
                                     <td>
-                                        {{$booking->status}}
+                                        {{$booking->booking_date}}
                                     </td>
                                     <td>
-                                        {{$booking->booking_date}}
+                                        {{$booking->status}}
                                     </td>
                                 </tr>
                                 @empty
                                     <tr>
                                         <td>
-                                            No Data Found
+                                            
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td style="text-align: center;">
+                                            Data booking belum tersedia
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            
                                         </td>
                                     </tr>
                                 @endforelse
