@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\BookingController;
@@ -46,5 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/barber/schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
     Route::get('/barber/price', [BarberController::class, 'Price'])->name('barber.Price');
     Route::post('/barber/price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
+
+
+    // Route Artikel
+    Route::resource('articles', ArticleController::class);
+
 
 });
