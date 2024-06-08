@@ -10,7 +10,11 @@ class AuthServiceProvider extends ServiceProvider
 {
     public static $permision = [
         'dashboard' => ['barber', 'user'],
-        'index-user' => [],
+        'index-user' => ['admin'],
+        'index-article' => ['admin'],
+        'create-article' => ['admin'],
+        'show-article' => ['admin'],
+        'edit-article' => ['admin'],
         'booking' => ['barber,user'],
         'barber-booking' => ['barber'],
         'barber-schedule' => ['barber'],
@@ -46,11 +50,11 @@ class AuthServiceProvider extends ServiceProvider
         //     return $user->role === 'barber';
         // });
 
-        Gate::before(function(User $user){
-            if($user->role === 'admin'){
-                return true;
-            }
-        });
+        // Gate::before(function(User $user){
+        //     if($user->role === 'admin'){
+        //         return true;
+        //     }
+        // });
 
         foreach(self::$permision as $action => $roles) {
             Gate::define($action, function(User $user) use($roles){
