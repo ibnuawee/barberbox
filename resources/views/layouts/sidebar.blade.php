@@ -40,6 +40,12 @@
         </li>
         @endcan
 
+        @can('index-article')
+        <li class="nav-item dropdown">
+            <a href="{{route('articles.index')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Artikel</span></a>
+        </li>
+        @endcan
+
         @show
     </ul>
 

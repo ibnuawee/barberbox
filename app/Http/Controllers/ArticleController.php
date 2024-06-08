@@ -6,12 +6,16 @@ use App\Models\Article;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
     public function index()
     {
+        if(Gate::denies('index-article')) {
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        }
         $articles = Article::with('user')->latest()->paginate(10);
         
         return view('articles.index', compact('articles'));
@@ -19,6 +23,9 @@ class ArticleController extends Controller
 
     public function create()
     {
+        if(Gate::denies('create-article')) {
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        }
         return view('articles.create');
     }
 
@@ -46,11 +53,17 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
+        if(Gate::denies('show-article')) {
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        }
         return view('articles.show', compact('article'));
     }
 
     public function edit(Article $article)
     {
+        if(Gate::denies('edit-article')) {
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        }
         return view('articles.edit', compact('article'));
     }
 
