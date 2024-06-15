@@ -6,8 +6,10 @@ use App\Models\Barber;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -48,13 +50,20 @@ class UserController extends Controller
             'phone' => 'required|string|min:10',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|in:user,barber,admin',
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $profilePath = null;
+        if ($request->hasFile('profile')) {
+            $profilePath = $request->file('profile')->store('profiles', 'public');
+        }
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'role' => $request->role,
+            'profile' => $profilePath,
             'email_verified_at'=>now(),
             'password' => Hash::make($request->password),
         ]);
@@ -81,6 +90,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255', Rule::unique('users')->ignore($user->id),
             'phone' => 'required|string|min:10',
             'role' => 'required|string|in:user,barber',
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         // Simpan data role lama
         $oldRole = $user->role;
@@ -98,6 +108,30 @@ class UserController extends Controller
         }
         return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
+
+    public function updatePicture(Request $request)
+    {
+
+        $request->validate([
+            'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        /** @var \App\Models\User $user **/
+        $user = Auth::user();
+
+        // Delete old profile picture if exists
+        if ($user->profile) {
+            Storage::disk('public')->delete($user->profile);
+        }
+
+        // Store new profile picture
+        $profilePath = $request->file('profile')->store('profiles', 'public');
+        $user->profile = $profilePath;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile picture updated successfully.');
+    }
+
 
     public function destroy(User $user)
     {

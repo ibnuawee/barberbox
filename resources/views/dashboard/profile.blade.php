@@ -18,8 +18,8 @@
             <div class="col-12 col-md-12 col-lg-5">
                 <div class="card profile-widget">
                     <div class="profile-widget-header">
-                        <img alt="image" src="../assets/img/avatar/avatar-1.png"
-                            class="rounded-circle profile-widget-picture">
+                        <img src="{{ auth()->user()->profile ? asset('storage/' . auth()->user()->profile) : asset('assets/img/avatar/avatar-1.png') }}" alt="image" 
+                            class="rounded-circle profile-widget-picture" width="150" id="profilePicture" style="cursor: pointer;">
                         <div class="profile-widget-items">
                             <div class="profile-widget-item">
                                 <div class="profile-widget-item-label">Posts</div>
@@ -186,6 +186,34 @@
     </div>
 </section>
 
+<!-- Modal for Uploading New Profile Picture -->
+<div class="modal fade" id="profilePictureModal" tabindex="-1" role="dialog" aria-labelledby="profilePictureModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profilePictureModalLabel">Change Profile Picture</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('profile.updatePicture') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="profilePictureInput">Choose a new profile picture</label>
+                        <input type="file" class="form-control" id="profilePictureInput" name="profile">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('sidebar')
@@ -210,4 +238,11 @@
 
 @push('customJs')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#profilePicture').click(function(){
+                $('#profilePictureModal').modal('show');
+            });
+        });
+    </script>
 @endpush
