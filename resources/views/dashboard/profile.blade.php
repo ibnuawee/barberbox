@@ -36,8 +36,8 @@
                         </div>
                     </div>
                     <div class="profile-widget-description">
-                        <div class="profile-widget-name">{{auth()->user()->name}} <div
-                                class="text-muted d-inline font-weight-normal">
+                        <div class="profile-widget-name">{{auth()->user()->name}} 
+                            <div class="text-muted d-inline font-weight-normal">
                                 <div class="slash"></div> {{auth()->user()->role}}
                             </div>
                         </div>
