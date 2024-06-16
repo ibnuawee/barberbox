@@ -44,6 +44,41 @@
                     <h6 class="text-uppercase mb-0">Service</h6>
                     <span class="text-uppercase text-primary">{{ $booking->service->name }}</span>
                 </div>
+                <div class="d-flex justify-content-between py-2">
+                    <h6 class="text-uppercase mb-0">Status</h6>
+                    <span class="text-uppercase text-primary">
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if(session('error'))   
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        @if ($booking->status === 'pending')
+                            <p>Pending</p>
+                        @elseif ($booking->status === 'confirmed')
+                            <p>Confirmed</p>
+                        @elseif ($booking->status === 'completed')
+                            <p>Completed</p>
+                            @if (is_null($booking->confirmed_at))
+                                <form action="{{ route('booking.confirm', $booking->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success">Confirm Booking</button>
+                                </form>
+                            @else
+                                <p>Booking confirmed by user.</p>
+                            @endif
+                        @elseif ($booking->status === 'success')
+                            <p>Success</p>
+                        @elseif ($booking->status === 'cancelled')
+                            <p>Cancelled</p>
+                        @endif
+                    </span>
+                </div>
             </div>
         </div>
     </div>

@@ -53,6 +53,7 @@
                                     <th>Gender</th>
                                     <th>Tanggal Booking</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 
                                 @forelse ($bookings as $index => $booking)
                                 <tr>
@@ -80,6 +81,24 @@
                                     </td>
                                     <td>
                                         {{$booking->status}}
+                                    </td>
+                                    <td>
+                                        @if ($booking->status === 'pending')
+                                            <form action="{{ route('booking.accept', $booking->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success">Confirm</button>
+                                            </form>
+                                        @elseif ($booking->status === 'pending' || $booking->status === 'confirmed')
+                                            <form action="{{ route('booking.complete', $booking->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success">Complete</button>
+                                            
+                                            </form>
+                                            <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Cancel</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty

@@ -29,6 +29,9 @@
 
     <!-- Template Stylesheet -->
     <link href="{{asset('assets2/css/style.css')}}" rel="stylesheet">
+
+    <!-- CSS Libraries -->
+    @stack('customCss')
 </head>
 
 <body>
@@ -84,6 +87,9 @@
     <script src="{{asset('assets2/lib/easing/easing.min.js')}}"></script>
     <script src="{{asset('assets2/lib/waypoints/waypoints.min.js')}}"></script>
     <script src="{{asset('assets2/lib/owlcarousel/owl.carousel.min.js')}}"></script>
+
+    <!-- JS Libraies -->
+    @stack('customJs')
 
     <!-- Template Javascript -->
     <script src="{{asset('assets2/js/main.js')}}"></script>

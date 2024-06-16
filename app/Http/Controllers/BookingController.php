@@ -7,11 +7,13 @@ use App\Models\Booking;
 use App\Models\User;
 use App\Models\Schedule;
 use App\Models\Service;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -50,11 +52,22 @@ class BookingController extends Controller
             'gender' => 'required|string|in:pria,wanita',
         ]);
 
+        $user = Auth::user();
         $barber = Barber::findOrFail($validated['barber_id']);
         $service = $barber->services()->where('service_id', $validated['service_id'])->first();
 
+        // Periksa apakah saldo pengguna mencukupi
+        if ($user->balance < $service->pivot->price) {
+            return back()->withErrors(['balance' => 'Saldo tidak mencukupi untuk melakukan booking ini.']);
+        }
+
+        // Kurangi saldo pengguna
+        /** @var \App\Models\User $user **/
+        $user->balance -= $service->pivot->price;
+        $user->save();
+
         $booking = Booking::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'barber_id' => $validated['barber_id'],
             'service_id' => $validated['service_id'],
             'haircut_name' => $validated['haircut_name'],
@@ -108,5 +121,87 @@ class BookingController extends Controller
             return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
+
+    public function accept(Booking $booking){
+        if ($booking->status !== 'confirmed') {
+            $booking->status = 'confirmed';
+            $booking->save();
+        }
+        return redirect()->route('barber.index', $booking->id)->with('success', 'Booking telah dikonfirmasi.');
+    }
+
+    public function complete(Booking $booking)
+    {
+        if ($booking->status !== 'completed') {
+            $booking->status = 'completed';
+            $booking->save();
+
+            // // Set timer untuk auto-konfirmasi setelah 1 hari
+            // $this->scheduleAutoConfirm($booking);
+        }
+
+        return redirect()->route('barber.index', $booking->id)->with('success', 'Booking marked as completed. Awaiting user confirmation.');
+    }
+
+    // private function scheduleAutoConfirm(Booking $booking)
+    // {
+    //     // Jadwalkan tugas untuk auto-konfirmasi setelah 1 hari
+    //     $booking->update(['confirmed_at' => Carbon::now()->addDay()]);
+    //     // Ini adalah tempat untuk menambahkan logika untuk menjadwalkan tugas di background (gunakan queue/job scheduler)
+    // }
+
+    public function confirm(Booking $booking)
+    {
+        if ($booking->status === 'completed' && is_null($booking->confirmed_at)) {
+            $booking->confirmed_at = now();
+            $booking->confirmation_token = Str::random(40); // Generate random token
+            $booking->status = 'success';
+            $booking->save();
+    
+            // Kreditkan saldo ke akun barber
+            $barber = $booking->barber->user;
+            $barber->balance += $booking->total_price;
+            $barber->save();
+
+            return redirect()->route('booking.show', $booking->id)->with('success', 'Booking confirmed and balance transferred to barber.');
+        }
+
+        return redirect()->route('booking.show', $booking->id)->with('error', 'Booking was already confirmed.');
+    }
+
+    public function autoConfirm()
+    {
+        $bookings = Booking::where('status', 'completed')
+            ->where('confirmed_at', '<=', now())
+            ->get();
+
+        foreach ($bookings as $booking) {
+            $booking->status = 'success';
+            $booking->save();
+
+            // Kreditkan saldo ke akun barber
+            $barber = $booking->barber->user;
+            $barber->balance += $booking->total_price;
+            $barber->save();
+        }
+    }
+
+
+    public function cancel(Booking $booking)
+    {
+        if ($booking->status !== 'cancelled') {
+            $booking->status = 'cancelled';
+            $booking->save();
+
+            // Kembalikan saldo ke pengguna
+            $user = $booking->user;
+            $user->balance += $booking->total_price;
+            $user->save();
+        }
+
+        return redirect()->route('barber.index', $booking->id)->with('success', 'Booking cancelled and balance returned to user.');
+    }
+
+
 
 }

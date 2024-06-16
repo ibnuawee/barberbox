@@ -29,8 +29,19 @@ Route::middleware(['auth', 'verified'])->group(function(){
         }
     })->name('home');
 
+    Route::get('/customer/myprofile', function () {
+        return view('dashboard.profileCustomer');
+    })->name('profileCustomer.edit');
+
     Route::get('edit-profile', function(){
-        return view('dashboard.profile');
+        $user = Auth::user();
+        if ($user->role == 'user') {
+            return redirect()->route('profileCustomer.edit');
+        } elseif (in_array($user->role, ['barber', 'admin'])) {
+            return view('dashboard.profile');
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     })->name('profile.edit');
 
     Route::resource('user', UserController::class);
@@ -49,6 +60,12 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/customer/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
     Route::get('/barber/available-schedule', [BookingController::class, 'availableSchedule'])->name('barber.availableSchedule');
     Route::get('/barber/available-services', [BookingController::class, 'availableServices'])->name('barber.availableServices');
+
+    Route::post('/booking/{booking}/accept', [BookingController::class, 'accept'])->name('booking.accept');
+    Route::post('/booking/{booking}/complete', [BookingController::class, 'complete'])->name('booking.complete');
+    Route::post('/booking/{booking}/confirm', [BookingController::class, 'confirm'])->name('booking.confirm');
+    Route::post('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
 
 
     // Route untuk barber
