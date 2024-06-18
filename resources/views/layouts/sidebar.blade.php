@@ -59,6 +59,12 @@
         </li>
         @endcan
 
+        @can('kelola-topup')
+        <li class="nav-item dropdown">
+            <a href="{{route('topups.admin_index')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Toup</span></a>
+        </li>
+        @endcan
+
         @show
     </ul>
 

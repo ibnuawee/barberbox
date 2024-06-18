@@ -25,7 +25,8 @@ class UserController extends Controller
                     ->orWhere('email', 'like', '%' . $search . '%')
                     ->orWhere('phone', 'like', '%' . $search . '%')
                     ->orWhere('role', 'like', '%' . $search . '%');
-            })->paginate(10);
+            })->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('user.index', compact('users'));
     }
 

@@ -7,6 +7,8 @@ use App\Models\TopUp;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class TopUpController extends Controller
 {
@@ -77,11 +79,16 @@ class TopUpController extends Controller
         return view('topups.index', compact('topUps'));
     }
 
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
+        if(Gate::denies('kelola-topup')) {
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        }
         $topUps = TopUp::where('status', 'pending')->paginate(10);
         return view('topups.indexAdmin', compact('topUps'));
+
     }
+    
 
     public function approve(TopUp $topUp)
     {

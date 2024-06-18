@@ -11,6 +11,7 @@ class AuthServiceProvider extends ServiceProvider
     public static $permision = [
         'dashboard' => ['barber', 'user'],
         'index-user' => ['admin'],
+        'create-user' => ['admin'],
         'index-article' => ['admin'],
         'create-article' => ['admin'],
         'show-article' => ['admin'],
@@ -23,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
         'barber-setprice' => ['barber'],
         'barber-saldo' => ['barber'],
         'admin-saldo' => ['admin'],
+        'kelola-topup' => ['admin'],
     ];
     /**
      * Register services.
