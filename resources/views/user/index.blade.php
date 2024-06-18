@@ -12,25 +12,18 @@
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Posts</h2>
-        <p class="section-lead">
-            You can manage all posts, such as editing, deleting and more.
-        </p>
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h4>All Posts</h4>
-                    </div>
                     <div class="card-body">
                         <div class="float-left">
-                            <select class="form-control selectric">
-                              <option>Action For Selected</option>
+                            {{-- <select class="form-control selectric">
+                              <option>Action </option>
                               <option>Move to Draft</option>
                               <option>Move to Pending</option>
                               <option>Delete Pemanently</option>
-                            </select>
-                          </div>
+                            </select> --}}
+                        </div>
                         <div class="float-right">
                             <form method="GET">
                                 <div class="input-group">

@@ -33,9 +33,7 @@
                             <div class="team-img position-relative overflow-hidden">
                                 <img class="img-fluid" src="{{asset('storage/' . $barber->user->profile)}}" alt="Image">
                                 <div class="team-social">
-                                    <a class="btn btn-square" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-square" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-square" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-primary" href="">view profile</a>
                                 </div>
                             </div>
                             <div class="bg-secondary text-center p-4">

@@ -1,5 +1,5 @@
 <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-    <h1 class="mb-0 text-primary text-uppercase"><i class="fa fa-cut me-3"></i>HairCut</h1>
+    <h1 class="mb-0 text-primary text-uppercase"><i class="fa fa-cut me-3"></i>BARBERBOX</h1>
 </a>
 <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
     <span class="navbar-toggler-icon"></span>
@@ -24,7 +24,10 @@
                         <i class="far fa-user"></i> Profile
                     </a>
                     <a href="{{ route('booking.index') }}" class="dropdown-item has-icon">
-                        <i class="far fa-user"></i> My Booking
+                        <i class="fa fa-list-alt"></i> My Booking
+                    </a>
+                    <a href="{{ route('transactions.index') }}" class="dropdown-item has-icon">
+                        <i class="fa fa-history"></i> Riwayat Saldo
                     </a>
                     <a href="#" class="dropdown-item has-icon text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit()">
                         <i class="fas fa-sign-out-alt"></i> Logout

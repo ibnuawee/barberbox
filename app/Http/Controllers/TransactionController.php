@@ -14,7 +14,7 @@ class TransactionController extends Controller
     public function saldoUser()
     {
         $transactions = Transaction::where('user_id', Auth::id())->paginate(10);
-        return view('transactions.user', compact('transactions'));
+        return view('transactions.index', compact('transactions'));
     }
 
     public function saldoBarber()
