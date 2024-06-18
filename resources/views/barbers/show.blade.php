@@ -20,7 +20,18 @@
                     </div>
                 </div>
 
-                
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Ratings</h4>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($barber->ratings as $rating)
+                            <div class="rating mb-3">
+                                <strong>{{ $rating->user->name }}</strong>
+                                <span>{{ $rating->rating }} stars</span>
+                                <p>{{ $rating->comment }}</p>
+                            </div>
+                        @endforeach
 
                         @auth
                             <form action="{{ url('/ratings') }}" method="POST">
