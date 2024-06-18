@@ -7,6 +7,8 @@ use App\Models\Booking;
 use App\Models\User;
 use App\Models\Schedule;
 use App\Models\Service;
+use App\Models\Setting;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,10 +63,26 @@ class BookingController extends Controller
             return back()->withErrors(['balance' => 'Saldo tidak mencukupi untuk melakukan booking ini.']);
         }
 
+        // Saldo sebelum transaksi
+        $balanceBefore = $user->balance;
+
         // Kurangi saldo pengguna
         /** @var \App\Models\User $user **/
         $user->balance -= $service->pivot->price;
         $user->save();
+
+        // Saldo setelah transaksi
+        $balanceAfter = $user->balance;
+
+        // Buat riwayat transaksi untuk booking
+        Transaction::create([
+            'user_id' => $user->id,
+            'type' => 'booking',
+            'amount' => -$service->pivot->price,
+            'balance_before' => $balanceBefore,
+            'balance_after' => $balanceAfter,
+            'description' => 'Booking for service: ' . $service->name,
+        ]);
 
         $booking = Booking::create([
             'user_id' => $user->id,
@@ -160,8 +178,31 @@ class BookingController extends Controller
     
             // Kreditkan saldo ke akun barber
             $barber = $booking->barber->user;
-            $barber->balance += $booking->total_price;
+
+            // Ambil persentase biaya admin dari pengaturan
+            $adminFeePercentage = Setting::first()->admin_fee_percentage;
+            $adminFee = ($booking->total_price * $adminFeePercentage) / 100;
+            $netAmount = $booking->total_price - $adminFee;
+
+            // Saldo sebelum transaksi
+            $balanceBefore = $barber->balance;
+
+            // Tambahkan saldo barber
+            $barber->balance += $netAmount;
             $barber->save();
+
+            // Saldo setelah transaksi
+            $balanceAfter = $barber->balance;
+
+            // Buat riwayat transaksi untuk konfirmasi
+            Transaction::create([
+                'user_id' => $barber->id,
+                'type' => 'booking',
+                'amount' => $booking->total_price,
+                'balance_before' => $balanceBefore,
+                'balance_after' => $balanceAfter,
+                'description' => 'Booking confirmed: ' . $booking->invoice_number,
+            ]);
 
             return redirect()->route('booking.show', $booking->id)->with('success', 'Booking confirmed and balance transferred to barber.');
         }
@@ -183,6 +224,14 @@ class BookingController extends Controller
             $barber = $booking->barber->user;
             $barber->balance += $booking->total_price;
             $barber->save();
+
+            // Buat riwayat transaksi untuk konfirmasi
+            Transaction::create([
+                'user_id' => $barber->id,
+                'type' => 'booking',
+                'amount' => $booking->total_price,
+                'description' => 'Booking confirmed: ' . $booking->invoice_number,
+            ]);
         }
     }
 
@@ -193,10 +242,26 @@ class BookingController extends Controller
             $booking->status = 'cancelled';
             $booking->save();
 
+            // Saldo sebelum transaksi
+            $balanceBefore = $booking->user->balance;
+
             // Kembalikan saldo ke pengguna
             $user = $booking->user;
             $user->balance += $booking->total_price;
             $user->save();
+
+            // Saldo setelah transaksi
+            $balanceAfter = $user->balance;
+
+            // Buat riwayat transaksi untuk pembatalan
+            Transaction::create([
+                'user_id' => $user->id,
+                'type' => 'canceled',
+                'amount' => $booking->total_price,
+                'balance_before' => $balanceBefore,
+                'balance_after' => $balanceAfter,
+                'description' => 'Cancelled booking: ' . $booking->invoice_number,
+            ]);
         }
 
         return redirect()->route('barber.index', $booking->id)->with('success', 'Booking cancelled and balance returned to user.');
