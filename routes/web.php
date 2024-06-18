@@ -9,6 +9,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\FollowerController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -110,6 +111,11 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
     Route::get('/barber/{barber}', [BarberController::class, 'show'])->name('barber.show');
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
+
+    Route::post('/follow', [FollowerController::class, 'follow']);
+    Route::delete('/unfollow', [FollowerController::class, 'unfollow']);
+    Route::get('/followers/{barber_id}', [FollowerController::class, 'followers']);
+    Route::get('/following/{user_id}', [FollowerController::class, 'following']);
 
 
 });
