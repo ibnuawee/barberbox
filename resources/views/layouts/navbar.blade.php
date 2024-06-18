@@ -14,6 +14,20 @@
     </div>
 </form>
 <ul class="navbar-nav navbar-right">
+    <li>
+            {{-- <ul class="navbar-nav mr-3">
+                    <a href="#" class="nav-link nav-link-lg">
+                        <div class="btn btn-light d-none d-lg-block">
+                            Rp.{{auth()->user()->balance}}
+                        </div>
+                    </a>
+            </ul> --}}
+            <a href="#" class="nav-link nav-link-lg">
+                <div class="btn btn-light d-none d-lg-block">
+                    Rp.{{auth()->user()->balance}}
+                </div>
+            </a>
+    </li>
     <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
             <img alt="image" src="{{ auth()->user()->profile ? asset('storage/' . auth()->user()->profile) : asset('assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1" />

@@ -22,6 +22,13 @@
             <a href="{{route('user.index')}}" class="nav-link"><i class="fas fa-users"></i><span>User List</span></a>
         </li>
         @endcan
+
+        @can('admin-saldo')
+        <li class="nav-item dropdown">
+            <a href="{{route('saldoAdmin.index')}}" class="nav-link"><i class="fas fa-users"></i><span>Riwayat Saldo</span></a>
+        </li>
+        @endcan
+
         @can('barber-booking')
         <li class="nav-item dropdown">
             <a href="{{route('barber.index')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Booking</span></a>
@@ -37,6 +44,12 @@
         @can('barber-price')
         <li class="nav-item dropdown">
             <a href="{{route('barber.setPrice')}}" class="nav-link"><i class="fas fa-users"></i><span>Kelola Harga</span></a>
+        </li>
+        @endcan
+
+        @can('barber-saldo')
+        <li class="nav-item dropdown">
+            <a href="{{route('saldoBarber.index')}}" class="nav-link"><i class="fas fa-users"></i><span>Riwayat saldo</span></a>
         </li>
         @endcan
 

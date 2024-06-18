@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\TopUpController;
+use App\Http\Controllers\TransactionController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -66,8 +70,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/booking/{booking}/confirm', [BookingController::class, 'confirm'])->name('booking.confirm');
     Route::post('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
-
-
     // Route untuk barber
         
     // Tambahkan route untuk fitur barber di sini
@@ -81,6 +83,29 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
     // Route Artikel
     Route::resource('articles', ArticleController::class);
+
+    // Route Topup
+    Route::get('/topups', [TopUpController::class, 'index'])->name('topups.index');
+    Route::get('/topups/create', [TopUpController::class, 'create'])->name('topups.create');
+    Route::post('/topups', [TopUpController::class, 'store'])->name('topups.store');
+    Route::get('/topups/{id}/detail', [TopUpController::class, 'detail'])->name('topups.detail');
+    Route::post('/topups/{id}/upload', [TopUpController::class, 'uploadProof'])->name('topups.uploadProof');
+    Route::get('/topups/{id}/invoice', [TopUpController::class, 'generateInvoice'])->name('topups.invoice');
+
+
+    // Route Admin
+    Route::get('/admin/topups', [TopUpController::class, 'adminIndex'])->name('topups.admin_index');
+    Route::patch('/topups/{topUp}/approve', [TopUpController::class, 'approve'])->name('topups.approve');
+    Route::patch('/topups/{topUp}/reject', [TopUpController::class, 'reject'])->name('topups.reject');
+        
+    Route::resource('payments', PaymentMethodController::class)->except(['show', 'edit', 'update']);
+
+    Route::get('/customer/saldo', [TransactionController::class, 'saldoUser'])->name('transactions.index');
+    Route::get('/barber/saldo', [TransactionController::class, 'SaldoBarber'])->name('saldoBarber.index');
+    Route::get('/admin/saldo', [TransactionController::class, 'SaldoAdmin'])->name('saldoAdmin.index');
+
+    Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    Route::post('/admin/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
 
 
 });

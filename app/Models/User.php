@@ -48,9 +48,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function articles()
-{
-    return $this->hasMany(Article::class);
-}
+    {
+        return $this->hasMany(Article::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
 
     /**
      * Get the attributes that should be cast.

@@ -6,6 +6,7 @@ use App\Models\Barber;
 use App\Models\Schedule;
 use App\Models\Booking;
 use App\Models\Service;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -106,4 +107,5 @@ class BarberController extends Controller
 
         return back()->with('success', 'Price set successfully for the service.');
     }
+
 }

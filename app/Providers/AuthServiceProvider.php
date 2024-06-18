@@ -21,6 +21,8 @@ class AuthServiceProvider extends ServiceProvider
         'barber-Setschedule' => ['barber'],
         'barber-price' => ['barber'],
         'barber-setprice' => ['barber'],
+        'barber-saldo' => ['barber'],
+        'admin-saldo' => ['admin'],
     ];
     /**
      * Register services.

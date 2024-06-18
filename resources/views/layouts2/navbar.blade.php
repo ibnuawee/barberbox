@@ -11,6 +11,12 @@
         <a href="{{ route('booking.create') }}" class="nav-item nav-link {{ Request::routeIs('booking.create') ? 'active' : '' }}">Book</a>
     </div>
     @if (Auth::check())
+            <div class="nav-item d-flex">
+            <div class="btn btn-primary bg-dark d-none d-lg-block">
+                    Rp.{{auth()->user()->balance}}
+            </div>
+            <a href="{{route('topups.index')}}" class="btn btn-primary  d-none d-lg-block nav-item"><i class="fa fa-plus"></i></a>
+            </div>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Hi, {{ Auth::user()->name }}</a>
                 <div class="dropdown-menu m-0">
@@ -30,4 +36,5 @@
             </div>
         @else
             <a href="{{ route('login') }}" class="btn btn-primary rounded-0 py-2 px-lg-4 d-none d-lg-block">Login</a>
-        @endif
+    @endif
+</div>
