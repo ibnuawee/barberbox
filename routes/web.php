@@ -8,6 +8,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\RatingController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/customer/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
     Route::get('/barber/available-schedule', [BookingController::class, 'availableSchedule'])->name('barber.availableSchedule');
     Route::get('/barber/available-services', [BookingController::class, 'availableServices'])->name('barber.availableServices');
+    Route::post('/ratings', [RatingController::class, 'store'])->middleware('auth');
 
     Route::post('/booking/{booking}/accept', [BookingController::class, 'accept'])->name('booking.accept');
     Route::post('/booking/{booking}/complete', [BookingController::class, 'complete'])->name('booking.complete');
