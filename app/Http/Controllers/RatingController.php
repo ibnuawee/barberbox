@@ -23,6 +23,6 @@ class RatingController extends Controller
             'comment' => $request->comment,
         ]);
 
-        return redirect()->back()->with('success', 'Rating submitted successfully');
+        return redirect()->route('barber.show', $request->barber_id)->with('success', 'Rating submitted successfully');
     }
 }
