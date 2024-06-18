@@ -57,6 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Transaction::class);
     }
 
+    public function ratings()
+    {
+    return $this->hasMany(Rating::class);
+    }
+
 
     /**
      * Get the attributes that should be cast.

@@ -30,4 +30,9 @@ class Barber extends Model
     {
         return $this->belongsToMany(Service::class, 'barber_service')->withPivot('price');
     }
+
+    public function ratings()
+    {
+    return $this->hasMany(Rating::class);
+    }
 }
