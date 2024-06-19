@@ -74,6 +74,7 @@
                             @endif
                         @elseif ($booking->status === 'success')
                             <p>Success</p>
+                            {{-- <a href="{{route('rating.show')}}">Rating</a> --}}
                         @elseif ($booking->status === 'cancelled')
                             <p>Cancelled</p>
                         @endif

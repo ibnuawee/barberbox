@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DateController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\TransactionController;
@@ -109,13 +110,16 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/admin/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
 
-    Route::get('/barber/{barber}', [BarberController::class, 'show'])->name('barber.show');
+    Route::get('/barber/{barber}', [RatingController::class, 'create'])->name('rating.show');
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
 
     Route::post('/follow', [FollowerController::class, 'follow']);
     Route::delete('/unfollow', [FollowerController::class, 'unfollow']);
     Route::get('/followers/{barber_id}', [FollowerController::class, 'followers']);
     Route::get('/following/{user_id}', [FollowerController::class, 'following']);
+
+    Route::get('/uas', [DateController::class, 'index']);
+    Route::post('/find-weekends', [DateController::class, 'findWeekends']);
 
 
 });
