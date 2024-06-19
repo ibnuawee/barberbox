@@ -65,7 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/customer/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
     Route::get('/barber/available-schedule', [BookingController::class, 'availableSchedule'])->name('barber.availableSchedule');
     Route::get('/barber/available-services', [BookingController::class, 'availableServices'])->name('barber.availableServices');
-    Route::post('/ratings', [RatingController::class, 'store'])->middleware('auth');
 
     Route::post('/booking/{booking}/accept', [BookingController::class, 'accept'])->name('booking.accept');
     Route::post('/booking/{booking}/complete', [BookingController::class, 'complete'])->name('booking.complete');
@@ -108,6 +107,9 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
     Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/admin/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
+
+    Route::get('/barber/{barber}', [BarberController::class, 'show'])->name('barber.show');
+    Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
 
 
 });
