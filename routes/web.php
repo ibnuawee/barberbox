@@ -14,6 +14,7 @@ use App\Http\Controllers\FollowerController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LeapYearController;
 
 Route::get('/', function () {
     return view('landingpage.index');
@@ -120,6 +121,9 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
     Route::get('/uas', [DateController::class, 'index']);
     Route::post('/find-weekends', [DateController::class, 'findWeekends']);
+
+    Route::get('/cek', [LeapYearController::class, 'index']);
+    Route::post('/check', [LeapYearController::class, 'check']);
 
 
 });
