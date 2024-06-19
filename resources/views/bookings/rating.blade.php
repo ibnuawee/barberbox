@@ -16,7 +16,6 @@
         </div>
     @endforeach
 
-    @auth
         <form action="{{ route('ratings.store') }}" method="POST">
             @csrf
             <input type="hidden" name="barber_id" value="{{ $barber->id }}">
@@ -36,6 +35,5 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit Rating</button>
         </form>
-    @endauth
 </div>
 @endsection

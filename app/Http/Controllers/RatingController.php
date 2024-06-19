@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View as FacadesView;
+use Illuminate\View\View;
 
 class RatingController extends Controller
 {
+    public function create(){
+
+        return view('bookings.rating');
+    }
     public function store(Request $request)
     {
         $request->validate([
