@@ -125,5 +125,9 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/cek', [LeapYearController::class, 'index']);
     Route::post('/check', [LeapYearController::class, 'check']);
 
+    
+    Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
+    
+
 
 });
