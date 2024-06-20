@@ -12,8 +12,9 @@ class CreateRatingsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('barber_id')->constrained()->onDelete('cascade');
-            $table->integer('rating')->unsigned()->default(1);
-            $table->text('comment')->nullable();
+            $table->foreignId('booking_id')->constrained()->onDelete('cascade');
+            $table->tinyInteger('rating')->unsigned();
+            $table->text('review')->nullable();
             $table->timestamps();
         });
     }
@@ -22,4 +23,4 @@ class CreateRatingsTable extends Migration
     {
         Schema::dropIfExists('ratings');
     }
-};
+}

@@ -8,6 +8,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Nomor</th>
                 <th>Details</th>
                 <th>Actions</th>
             </tr>
@@ -16,6 +17,7 @@
             @foreach($paymentMethods as $method)
                 <tr>
                     <td>{{ $method->name }}</td>
+                    <td>{{ $method->nomor}}</td>
                     <td>{{ $method->details }}</td>
                     <td>
                         <form action="{{ route('payments.destroy', $method->id) }}" method="POST">

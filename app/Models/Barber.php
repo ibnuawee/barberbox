@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\workSchedule;
 
 class Barber extends Model
 {
@@ -31,13 +30,14 @@ class Barber extends Model
         return $this->belongsToMany(Service::class, 'barber_service')->withPivot('price');
     }
 
-    public function ratings()
-    {
-    return $this->hasMany(Rating::class);
-    }
-
     public function users()
     {
         return $this->belongsToMany(User::class, 'followers');
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
 }

@@ -16,9 +16,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($transactions as $transaction)
+            @forelse($transactions as $index => $transaction)
                 <tr>
-                    <td>{{ $transaction->id }}</td>
+                    {{-- <td>{{ $transaction->id }}</td> --}}
+                    <td>{{ $index + $transactions -> firstItem() }}</td>
                     <td>{{ ucfirst($transaction->type) }}</td>
                     <td>{{ $transaction->amount }}</td>
                     <td>{{ $transaction->description }}</td>

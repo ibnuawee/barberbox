@@ -5,30 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View as FacadesView;
-use Illuminate\View\View;
 
 class RatingController extends Controller
 {
-    public function create(){
-
-        return view('bookings.rating');
-    }
     public function store(Request $request)
     {
         $request->validate([
+            'booking_id' => 'required|exists:bookings,id',
             'barber_id' => 'required|exists:barbers,id',
-            'rating' => 'required|integer|min=1|max=5',
-            'comment' => 'nullable|string',
+            'rating' => 'required|integer|between:1,5',
+            'review' => 'nullable|string',
         ]);
+
+        $user = Auth::user();
 
         Rating::create([
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
+            'booking_id' => $request->booking_id,
             'barber_id' => $request->barber_id,
             'rating' => $request->rating,
-            'comment' => $request->comment,
+            'review' => $request->review,
         ]);
 
-        return redirect()->route('barber.show', $request->barber_id)->with('success', 'Rating submitted successfully');
+        return redirect()->route('booking.show', $request->booking_id)->with('success', 'Rating submitted successfully.');
     }
 }
