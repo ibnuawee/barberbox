@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barber;
-use App\Models\Schedule;
 use App\Models\Booking;
+use App\Models\Schedule;
 use App\Models\Service;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,35 +15,35 @@ class BarberController extends Controller
 {
     public function index(Request $request)
     {
-        if(Gate::denies('barber-booking')) {
+        if (Gate::denies('barber-booking')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $barber = Auth::user()->barber;
         $query = Booking::with('user')
-        ->where('barber_id', $barber->id);
+            ->where('barber_id', $barber->id);
 
         if ($search = $request->input('search')) {
-            $query->whereHas('user', function($q) use ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', '%' . $search . '%')
-                ->orWhere('phone', 'like', '%' . $search . '%');
-        });
-    }
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('phone', 'like', '%' . $search . '%');
+            });
+        }
 
-    $bookings = $query->paginate(10);
+        $bookings = $query->paginate(10);
         return view('barbers.index', compact('bookings'));
     }
 
     public function schedule(Request $request)
     {
-        if(Gate::denies('barber-schedule')) {
+        if (Gate::denies('barber-schedule')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $barber = Auth::user()->barber;
         $schedules = Schedule::paginate(5);
-        $schedules= DB::table('schedules')
-        ->where('barber_id', $barber->id)
-            ->when($request->input('search'), function($query,$search){
+        $schedules = DB::table('schedules')
+            ->where('barber_id', $barber->id)
+            ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', '%' . $search . '%')
                     ->orWhere('email', 'like', '%' . $search . '%')
                     ->orWhere('phone', 'like', '%' . $search . '%')
@@ -56,7 +55,7 @@ class BarberController extends Controller
 
     public function setSchedule(Request $request)
     {
-        if(Gate::denies('barber-Setschedule')) {
+        if (Gate::denies('barber-Setschedule')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $validated = $request->validate([
@@ -74,13 +73,13 @@ class BarberController extends Controller
 
     public function Price(Request $request)
     {
-        if(Gate::denies('barber-price')) {
+        if (Gate::denies('barber-price')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $barber = Auth::user()->barber;
-        $allservices = Service::all(); 
+        $allservices = Service::all();
         $query = $barber->services()->withPivot('price');
-    
+
         if ($search = $request->input('search')) {
             $query->where('name', 'like', '%' . $search . '%');
         }
@@ -92,7 +91,7 @@ class BarberController extends Controller
 
     public function setPrice(Request $request)
     {
-        if(Gate::denies('barber-setprice')) {
+        if (Gate::denies('barber-setprice')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $validated = $request->validate([
@@ -102,10 +101,20 @@ class BarberController extends Controller
 
         $barber = Auth::user()->barber;
         $barber->services()->syncWithoutDetaching([
-        $validated['service_id'] => ['price' => $validated['price']]
+            $validated['service_id'] => ['price' => $validated['price']],
         ]);
 
         return back()->with('success', 'Price set successfully for the service.');
+    }
+
+    // tak tambah
+    public function showProfile(Barber $barber)
+    {
+        // Tidak perlu hitung jumlah followers jika sudah ada di database
+        return view('bookings.profile', [
+            'barber' => $barber,
+            'followers_count' => $barber->followers_count,
+        ]);
     }
 
 }
