@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DateController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\TopUpController;
@@ -15,6 +16,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LeapYearController;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return view('landingpage.index');
@@ -128,6 +130,14 @@ Route::middleware(['auth', 'verified'])->group(function(){
     
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
     
+   // Route untuk menampilkan halaman chat
+    Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
+
+    // Route untuk mengambil semua pesan
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+
+    // Route untuk mengirim pesan
+    Route::post('/messages', [MessageController::class, 'sendMessage'])->name('messages.send');
 
 
 });
