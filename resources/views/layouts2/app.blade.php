@@ -7,6 +7,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- Favicon -->
     <link href="{{asset('assets2/img/favicon.ico')}}" rel="icon">
@@ -64,7 +66,7 @@
 
     <!-- Content Start -->
     <div class="container-xxl py-5">
-        <div class="container">
+        <div class="container" id="app">
             @yield('content')
         </div>
     </div>

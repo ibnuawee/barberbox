@@ -131,13 +131,23 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
     
    // Route untuk menampilkan halaman chat
-    Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
+    // Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
 
-    // Route untuk mengambil semua pesan
-    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    // // Route untuk mengambil semua pesan
+    // Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
 
-    // Route untuk mengirim pesan
-    Route::post('/messages', [MessageController::class, 'sendMessage'])->name('messages.send');
+    // // Route untuk mengirim pesan
+    // Route::post('/messages', [MessageController::class, 'store'])->name('messages.send');
+
+    // Route::get('/chat', [MessageController::class, 'index'])->name('chat.index');
+    // Route::post('/chat', [MessageController::class, 'store'])->name('chat.store');
+    // Route::view('/chat-app', 'chat.index')->name('chat.view'); // Add a route to serve the chat view
+
+    Route::get('/chat/{receiver_id}', [ChatController::class, 'viewChat'])->name('chat.view');
+    Route::post('/send-message', [ChatController::class, 'sendMessage']);
+    
+
+
 
 
 });

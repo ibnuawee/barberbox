@@ -15,13 +15,13 @@ import Pusher from 'pusher-js';
  * to use in your application's views. An example is included for you.
  */
 
-const app = createApp({});
+// const app = createApp({});
 
-import ExampleComponent from './components/ExampleComponent.vue';
-import ChatComponent from './components/ChatComponent.vue';
+// import ExampleComponent from './components/ExampleComponent.vue';
+// import ChatComponent from './components/ChatComponent.vue';
 
-app.component('example-component', ExampleComponent);
-app.component('chat-component', ChatComponent);
+// app.component('example-component', ExampleComponent);
+// app.component('chat-component', ChatComponent);
 
 
 /**
@@ -43,17 +43,22 @@ app.component('chat-component', ChatComponent);
  */
 
 // Configure Echo for real-time events
-window.Pusher = Pusher;
+// window.Pusher = Pusher;
 
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    encrypted: true,
-    forceTLS: true
-});
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//     encrypted: true,
+//     forceTLS: true
+// });
 
-console.log(import.meta.env.VITE_PUSHER_APP_KEY);
-console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
+// console.log(import.meta.env.VITE_PUSHER_APP_KEY);
+// console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
 
-app.mount('#app');
+// app.mount('#app');
+
+window.Echo.private(`chat.${recipientId}`)
+    .listen('ChatMessageSent', (e) => {
+        console.log(e.user.name + ': ' + e.message.message);
+    });
