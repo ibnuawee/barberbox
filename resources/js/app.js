@@ -1,10 +1,5 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 import './bootstrap';
+<<<<<<< HEAD
 import { createApp } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
@@ -62,3 +57,5 @@ window.Echo.private(`chat.${recipientId}`)
     .listen('ChatMessageSent', (e) => {
         console.log(e.user.name + ': ' + e.message.message);
     });
+=======
+>>>>>>> parent of 086e388 (test chat)

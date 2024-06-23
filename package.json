@@ -6,9 +6,8 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@popperjs/core": "^2.11.6",
-        "@vitejs/plugin-vue": "^4.5.0",
         "axios": "^1.6.4",
+<<<<<<< HEAD
         "bootstrap": "^5.2.3",
         "laravel-echo": "^1.16.1",
         "laravel-mix": "^6.0.49",
@@ -17,5 +16,9 @@
         "sass": "^1.56.1",
         "vite": "^5.0",
         "vue": "^3.2.37"
+=======
+        "laravel-vite-plugin": "^1.0",
+        "vite": "^5.0"
+>>>>>>> parent of 086e388 (test chat)
     }
 }

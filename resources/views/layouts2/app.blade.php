@@ -34,8 +34,6 @@
 
     <!-- CSS Libraries -->
     @stack('customCss')
-
-    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -97,9 +95,6 @@
 
     <!-- Template Javascript -->
     <script src="{{asset('assets2/js/main.js')}}"></script>
-
-    {{-- <!-- Laravel Mix Javascript -->
-    <script src="{{ mix('js/app.js') }}"></script> --}}
 </body>
 
 </html>
