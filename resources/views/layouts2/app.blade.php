@@ -32,6 +32,8 @@
 
     <!-- CSS Libraries -->
     @stack('customCss')
+
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -62,7 +64,7 @@
 
     <!-- Content Start -->
     <div class="container-xxl py-5">
-        <div class="container">
+        <div class="container" id="app">
             @yield('content')
         </div>
     </div>
@@ -93,6 +95,9 @@
 
     <!-- Template Javascript -->
     <script src="{{asset('assets2/js/main.js')}}"></script>
+
+    {{-- <!-- Laravel Mix Javascript -->
+    <script src="{{ mix('js/app.js') }}"></script> --}}
 </body>
 
 </html>
