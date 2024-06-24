@@ -107,14 +107,31 @@ class BarberController extends Controller
         return back()->with('success', 'Price set successfully for the service.');
     }
 
-    // tak tambah
-    public function showProfile(Barber $barber)
+    // TAK TAMBAH
+    public function showProfile($barberId)
     {
-        // Tidak perlu hitung jumlah followers jika sudah ada di database
-        return view('bookings.profile', [
-            'barber' => $barber,
-            'followers_count' => $barber->followers_count,
-        ]);
+        $barber = Barber::findOrFail($barberId);
+        $averageRating = $barber->ratings()->avg('rating'); // Menghitung rata-rata rating
+    
+        return view('bookings.profile', compact('barber', 'averageRating'));
+    }
+    
+
+    // rata2 ratings
+    public function show($id)
+    {
+        // Mengambil booking dengan relasi ke barber, user barber, services barber, dan ratings barber
+        $booking = Booking::with('barber.user', 'barber.services', 'barber.ratings.user')->findOrFail($id);
+
+        $barber = $booking->barber;
+        $averageRating = $barber->ratings->avg('rating');
+
+        // Menghitung rating rata-rata untuk setiap layanan
+        foreach ($barber->services as $service) {
+            $service->average_rating = $service->ratings->avg('rating');
+        }
+
+        return view('bookings.show', compact('barber', 'averageRating', 'booking'));
     }
 
 }

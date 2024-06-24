@@ -24,4 +24,10 @@ class Rating extends Model
     {
         return $this->belongsTo(Booking::class);
     }
+    
+    // TAK TAMBAH
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'Barber Details')
 
@@ -36,4 +36,4 @@
             <button type="submit" class="btn btn-primary">Submit Rating</button>
         </form>
 </div>
-@endsection
+@endsection --}}

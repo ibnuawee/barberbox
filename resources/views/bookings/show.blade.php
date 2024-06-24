@@ -41,10 +41,6 @@
                         <span class="text-uppercase">{{ $booking->total_price }}</span>
                     </div>
                     <div class="d-flex justify-content-between py-2">
-                        <h6 class="text-uppercase mb-0">Service</h6>
-                        <span class="text-uppercase text-primary">{{ $booking->service->name }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-2">
                         <h6 class="text-uppercase mb-0">Status</h6>
                         <span class="text-uppercase text-primary">
                             @if (session('success'))
@@ -77,21 +73,21 @@
                                     @csrf
                                     <input type="hidden" name="booking_id" value="{{ $booking->id }}">
                                     <input type="hidden" name="barber_id" value="{{ $booking->barber->id }}">
-                                    <div>
-                                        <label for="rating">Rating:</label>
-                                        <select name="rating" id="rating" required>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                    <div class="mb-3">
+                                        <label for="rating" class="form-label">Rating:</label>
+                                        <div class="star-rating">
+                                            <input type="radio" id="rating1" name="rating" value="1"><label for="rating1"><i class="fas fa-star"></i></label>
+                                            <input type="radio" id="rating2" name="rating" value="2"><label for="rating2"><i class="fas fa-star"></i></label>
+                                            <input type="radio" id="rating3" name="rating" value="3"><label for="rating3"><i class="fas fa-star"></i></label>
+                                            <input type="radio" id="rating4" name="rating" value="4"><label for="rating4"><i class="fas fa-star"></i></label>
+                                            <input type="radio" id="rating5" name="rating" value="5"><label for="rating5"><i class="fas fa-star"></i></label>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label for="review">Review:</label>
-                                        <textarea name="review" id="review"></textarea>
+                                    <div class="mb-3">
+                                        <label for="review" class="form-label">Review:</label>
+                                        <textarea name="review" id="review" class="form-control"></textarea>
                                     </div>
-                                    <button type="submit">Submit Rating</button>
+                                    <button type="submit" class="btn btn-primary">Submit Rating</button>
                                 </form>
                             @elseif ($booking->status === 'cancelled')
                                 <p>Cancelled</p>
@@ -102,4 +98,44 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .star-rating {
+            font-size: 30px;
+        }
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #f39c12;
+        }
+        /* Adjust alignment of stars */
+        .star-rating label {
+            margin-right: 5px; /* Adjust as needed */
+        }
+    </style>
+
+    <script>
+        // Optional: Untuk menambahkan interaktivitas
+        const ratings = document.querySelectorAll('.star-rating input[type="radio"]');
+        ratings.forEach(rating => {
+            rating.addEventListener('change', () => {
+                // Reset all stars color to default
+                document.querySelectorAll('.star-rating label').forEach(label => {
+                    label.style.color = '#ddd';
+                });
+                // Set color for selected star and all stars to its left
+                let selectedRating = parseInt(rating.value);
+                for (let i = 1; i <= selectedRating; i++) {
+                    document.getElementById('rating' + i).nextElementSibling.style.color = '#f39c12';
+                }
+                console.log('Rating selected:', rating.value);
+            });
+        });
+    </script>
 @endsection
