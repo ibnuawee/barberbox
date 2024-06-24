@@ -131,10 +131,10 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
     
    // Route untuk menampilkan halaman chat
-    Route::get('/chat/{receiverId}', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{receiver_id}', [MessageController::class, 'index'])->name('chat.index');
 
     // Route untuk mengambil semua pesan
-    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{receiver_id}', [MessageController::class, 'getMessages'])->name('messages.get');
 
     // Route untuk mengirim pesan
     Route::post('/messages', [MessageController::class, 'sendMessage'])->name('messages.send');

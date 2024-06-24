@@ -64,7 +64,7 @@
 
     <!-- Content Start -->
     <div class="container-xxl py-5">
-        <div class="container">
+        <div class="container" id="app">
             @yield('content')
         </div>
     </div>

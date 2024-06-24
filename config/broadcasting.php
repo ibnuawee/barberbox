@@ -1,9 +1,6 @@
 <?php
 
 return [
-
-    // 'default' => env('BROADCAST_DRIVER', 'null'),
-
     'connections' => [
 
         'pusher' => [
@@ -15,19 +12,6 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
             ],
-        ],
-
-        'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-        ],
-
-        'log' => [
-            'driver' => 'log',
-        ],
-
-        'null' => [
-            'driver' => 'null',
         ],
 
     ],
