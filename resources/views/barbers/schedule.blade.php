@@ -1,30 +1,30 @@
 @extends('layouts.app')
 
-@section('title','User')
+@section('title','Jadwal')
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>List User</h1>
+        <h1>Atur Jadwal</h1>
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Posts</h2>
+        {{-- <h2 class="section-title">Posts</h2>
         <p class="section-lead">
             You can manage all posts, such as editing, deleting and more.
-        </p>
+        </p> --}}
         
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <h4>All Posts</h4>
-                    </div>
+                    </div> --}}
                     <div class="card-body">
                         <div class="float-left">
                                 <form action="{{ route('barber.setSchedule') }}" method="POST">
                                 @csrf
-                                    <label for="available_date">Tanggal dan Jam Tersedia:</label>
+                                    <label for="available_date">Tambah Jadwal:</label>
                                     <input type="datetime-local" name="available_date" id="available_date" required>
                                     <button type="submit">Set</button>
                                 </form>
@@ -48,6 +48,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Jadwal Tersedia</th>
+                                    <th>Aksi</th>
                                 
                                 @forelse ($schedules as $index => $schedule)
                                 <tr>
@@ -56,6 +57,13 @@
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($schedule->available_date)->locale('id')->translatedFormat('l, d F Y H:i') }}
+                                    </td>
+                                    <td>
+                                        <form action="{{route('schedule.destroy', $schedule->id)}}" method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">Hapus</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @empty
@@ -81,20 +89,5 @@
         </div>
     </div>
 </section>
-
-@endsection
-
-@section('sidebar')
-@parent
-<li class="menu-header">Starter</li>
-<li class="nav-item dropdown">
-    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-        <span>Layout</span></a>
-    <ul class="dropdown-menu">
-        <li><a class="nav-link" href="layout-default.html">Default Layout</a></li>
-        <li><a class="nav-link" href="layout-transparent.html">Transparent Sidebar</a></li>
-        <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
-    </ul>
-</li>
 
 @endsection

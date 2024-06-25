@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Gate;
 
 class BarberController extends Controller
 {
+    public function dashboard()
+    {
+        return view('barbers.dashboard');
+    }
     public function index(Request $request)
     {
         if (Gate::denies('barber-booking')) {
@@ -20,13 +24,17 @@ class BarberController extends Controller
         }
         $barber = Auth::user()->barber;
         $query = Booking::with('user')
-            ->where('barber_id', $barber->id);
+        ->where('barber_id', $barber->id)
+        ->orderBy('created_at', 'desc');
 
         if ($search = $request->input('search')) {
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%');
+                $query->whereHas('user', function($q) use ($search) {
+                    $q->where('invoice_number', 'like', '%' . $search . '%')
+                    ->orWhere('name', 'like', '%' . $search . '%')
+                    ->orWhere('haircut_name', 'like', '%' . $search . '%')
+                    ->orWhere('gender', 'like', '%' . $search . '%')
+                    ->orWhere('booking_date', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%');
             });
         }
 
@@ -40,18 +48,24 @@ class BarberController extends Controller
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $barber = Auth::user()->barber;
-        $schedules = Schedule::paginate(5);
         $schedules = DB::table('schedules')
-            ->where('barber_id', $barber->id)
+            ->leftJoin('bookings', function($join) {
+                $join->on('schedules.available_date', '=', 'bookings.booking_date')
+                    ->on('schedules.barber_id', '=', 'bookings.barber_id');
+            })
+            ->where('schedules.barber_id', $barber->id)
+            ->whereNull('bookings.id') // Only select schedules that are not booked
+            ->orderBy('schedules.available_date', 'asc')
             ->when($request->input('search'), function ($query, $search) {
-                $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%')
-                    ->orWhere('role', 'like', '%' . $search . '%');
-            })->paginate(10);
+                $query->where('schedules.name', 'like', '%' . $search . '%')
+                    ->orWhere('schedules.email', 'like', '%' . $search . '%')
+                    ->orWhere('schedules.phone', 'like', '%' . $search . '%')
+                    ->orWhere('schedules.role', 'like', '%' . $search . '%');
+            })->select('schedules.*')->paginate(10);
 
         return view('barbers.schedule', compact('schedules'));
     }
+
 
     public function setSchedule(Request $request)
     {
@@ -69,6 +83,18 @@ class BarberController extends Controller
         ]);
 
         return back();
+    }
+
+    public function destroy($id)
+    {
+        // if (Gate::denies('delete-user')) {
+        //     abort(403, 'Anda tidak memiliki cukup hak akses');
+        // }
+        $schedule = Schedule::find($id);
+        $schedule->delete();
+
+        // Kembali dengan pesan sukses
+        return back()->with('success', 'Jadwal berhasil dihapus');
     }
 
     public function Price(Request $request)

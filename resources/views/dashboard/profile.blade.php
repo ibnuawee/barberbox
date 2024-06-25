@@ -22,12 +22,12 @@
                             class="rounded-circle profile-widget-picture" width="150" id="profilePicture" style="cursor: pointer;">
                         <div class="profile-widget-items">
                             <div class="profile-widget-item">
-                                <div class="profile-widget-item-label">Posts</div>
-                                <div class="profile-widget-item-value">187</div>
+                                <div class="profile-widget-item-label">Rating</div>
+                                <div class="profile-widget-item-value">4.9</div>
                             </div>
                             <div class="profile-widget-item">
                                 <div class="profile-widget-item-label">Followers</div>
-                                <div class="profile-widget-item-value">6,8K</div>
+                                <div class="profile-widget-item-value">1,3</div>
                             </div>
                             <div class="profile-widget-item">
                                 <div class="profile-widget-item-label">Following</div>
@@ -216,20 +216,6 @@
 
 @endsection
 
-@section('sidebar')
-@parent
-<li class="menu-header">Starter</li>
-<li class="nav-item dropdown">
-    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-        <span>Layout</span></a>
-    <ul class="dropdown-menu">
-        <li><a class="nav-link" href="layout-default.html">Default Layout</a></li>
-        <li><a class="nav-link" href="layout-transparent.html">Transparent Sidebar</a></li>
-        <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
-    </ul>
-</li>
-
-@endsection
 
 @push('customCss')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.min.css">

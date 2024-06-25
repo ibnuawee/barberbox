@@ -18,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
         'edit-article' => ['admin'],
         'booking' => ['barber,user'],
         'barber-booking' => ['barber'],
+        'dashboard-barber' => ['barber'],
         'barber-schedule' => ['barber'],
         'barber-Setschedule' => ['barber'],
         'barber-price' => ['barber'],

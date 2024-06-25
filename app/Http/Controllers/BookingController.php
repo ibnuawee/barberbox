@@ -198,7 +198,7 @@ class BookingController extends Controller
             Transaction::create([
                 'user_id' => $barber->id,
                 'type' => 'booking',
-                'amount' => +$booking->total_price,
+                'amount' => $netAmount,
                 'balance_before' => $balanceBefore,
                 'balance_after' => $balanceAfter,
                 'description' => 'Booking confirmed: ' . $booking->invoice_number,

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DateController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\LeapYearController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessageController;
+use Illuminate\Support\Facades\Redirect;
 
 Route::get('/', function () {
     return view('landingpage.index');
@@ -30,7 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $user = Auth::user();
         if ($user->role == 'user') {
             return redirect()->route('landingpage.index');
-        } elseif (in_array($user->role, ['barber', 'admin'])) {
+        } elseif ($user->role =='barber') {
+            return redirect()->route('barber.dashboard');
+        } elseif ($user->role =='admin') {
             return view('dashboard.home');
         } else {
             abort(403, 'Unauthorized action.');
@@ -76,10 +81,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route untuk barber
 
     // Tambahkan route untuk fitur barber di sini
-    Route::get('/barber', [BarberController::class, 'index'])->name('barber.index');
+    Route::get('/barber/dashboard', [BarberController::class, 'dashboard'])->name('barber.dashboard');
+    Route::get('/barber/booking', [BarberController::class, 'index'])->name('barber.index');
     Route::get('/barber/schedule', [BarberController::class, 'schedule'])->name('barber.schedule');
     // Route::post('/barber/set-schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
     Route::post('/barber/schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
+    Route::delete('/barber/schedule/{id}', [BarberController::class, 'destroy'])->name('schedule.destroy');
     Route::get('/barber/price', [BarberController::class, 'Price'])->name('barber.Price');
     Route::post('/barber/price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
 
@@ -123,6 +130,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/check', [LeapYearController::class, 'check']);
 
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
+    
+   // Route untuk menampilkan halaman chat
+    Route::get('/chat/{receiver_id}', [MessageController::class, 'index'])->name('chat.index');
+
+    // Route untuk mengambil semua pesan
+    Route::get('/messages/{receiver_id}', [MessageController::class, 'getMessages'])->name('messages.get');
+
+    // Route untuk mengirim pesan
+    Route::post('/messages', [MessageController::class, 'sendMessage'])->name('messages.send');
+
 
     // TAK TAMBAH
     Route::get('/barber/{barber}', [BarberController::class, 'showProfile'])->name('barber.profile');

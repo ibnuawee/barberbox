@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -67,6 +68,8 @@ class UserController extends Controller
             'profile' => $profilePath,
             'email_verified_at'=>now(),
             'password' => Hash::make($request->password),
+            'api_token' => Str::random(60),
+            'remember_token' => Str::random(10),
         ]);
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
