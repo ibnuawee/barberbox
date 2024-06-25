@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','User')
+@section('title','List Book')
 
 @section('content')
 <section class="section">
@@ -11,25 +11,25 @@
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Posts</h2>
+        {{-- <h2 class="section-title">Posts</h2>
         <p class="section-lead">
             You can manage all posts, such as editing, deleting and more.
-        </p>
+        </p> --}}
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <h4>All Posts</h4>
-                    </div>
+                    </div> --}}
                     <div class="card-body">
-                        <div class="float-left">
+                        {{-- <div class="float-left">
                             <select class="form-control selectric">
                               <option>Action For Selected</option>
                               <option>Move to Draft</option>
                               <option>Move to Pending</option>
                               <option>Delete Pemanently</option>
                             </select>
-                          </div>
+                          </div> --}}
                         <div class="float-right">
                             <form method="GET">
                                 <div class="input-group">
@@ -64,11 +64,6 @@
                                         {{$booking->invoice_number}}
                                     </td>
                                     <td>{{$booking->user->name}}
-                                        <div class="table-links">
-                                            <div class="bullet"></div>
-                                            <a href="">Edit</a>
-                                            <div class="bullet"></div>
-                                        </div>
                                     </td>
                                     <td>
                                         {{$booking->haircut_name}}
@@ -142,20 +137,5 @@
         </div>
     </div>
 </section>
-
-@endsection
-
-@section('sidebar')
-@parent
-<li class="menu-header">Starter</li>
-<li class="nav-item dropdown">
-    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-        <span>Layout</span></a>
-    <ul class="dropdown-menu">
-        <li><a class="nav-link" href="layout-default.html">Default Layout</a></li>
-        <li><a class="nav-link" href="layout-transparent.html">Transparent Sidebar</a></li>
-        <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
-    </ul>
-</li>
 
 @endsection

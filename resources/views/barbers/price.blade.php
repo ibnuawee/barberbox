@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title','User')
+@section('title','Set Price')
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>List User</h1>
+        <h1>Atur Biaya Service</h1>
     </div>
 
     <div class="section-body">
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
+                    {{-- <div class="card-header">
                         <h4>All Posts</h4>
-                    </div>
+                    </div> --}}
                     <div class="card-body">
                         <div class="float-left">
                             <form method="POST" action="{{ route('barber.setPrice') }}">
@@ -35,7 +35,7 @@
                             </form>
 
                           </div>
-                        <div class="float-right">
+                        {{-- <div class="float-right">
                             <form method="GET">
                                 <div class="input-group">
                                     <input name="search" type="text" class="form-control" placeholder="Search">
@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
 
                         <div class="clearfix mb-3"></div>
 
@@ -90,20 +90,5 @@
         </div>
     </div>
 </section>
-
-@endsection
-
-@section('sidebar')
-@parent
-<li class="menu-header">Starter</li>
-<li class="nav-item dropdown">
-    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-        <span>Layout</span></a>
-    <ul class="dropdown-menu">
-        <li><a class="nav-link" href="layout-default.html">Default Layout</a></li>
-        <li><a class="nav-link" href="layout-transparent.html">Transparent Sidebar</a></li>
-        <li><a class="nav-link" href="layout-top-navigation.html">Top Navigation</a></li>
-    </ul>
-</li>
 
 @endsection
