@@ -2,20 +2,20 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DateController;
+use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\LeapYearController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\RatingController;
-use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LeapYearController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Redirect;
 
@@ -27,8 +27,8 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-Route::middleware(['auth', 'verified'])->group(function(){
-    Route::get('home', function(){
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('home', function () {
         // return view('dashboard.home');
         $user = Auth::user();
         if ($user->role == 'user') {
@@ -46,7 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
         return view('dashboard.profileCustomer');
     })->name('profileCustomer.edit');
 
-    Route::get('edit-profile', function(){
+    Route::get('edit-profile', function () {
         $user = Auth::user();
         if ($user->role == 'user') {
             return redirect()->route('profileCustomer.edit');
@@ -65,7 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
     // Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
     Route::put('/profile/updatePicture', [App\Http\Controllers\UserController::class, 'updatePicture'])->name('profile.updatePicture');
 
-
     Route::get('/customer/mybooking', [BookingController::class, 'index'])->name('booking.index');
     Route::get('/booking/create', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
@@ -80,7 +79,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
     // Route untuk barber
-        
+
     // Tambahkan route untuk fitur barber di sini
     Route::get('/barber/dashboard', [BarberController::class, 'dashboard'])->name('barber.dashboard');
     Route::get('/barber/booking', [BarberController::class, 'index'])->name('barber.index');
@@ -90,7 +89,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::delete('/barber/schedule/{id}', [BarberController::class, 'destroy'])->name('schedule.destroy');
     Route::get('/barber/price', [BarberController::class, 'Price'])->name('barber.Price');
     Route::post('/barber/price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
-
 
     // Route Artikel
     Route::resource('articles', ArticleController::class);
@@ -103,12 +101,11 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::post('/topups/{id}/upload', [TopUpController::class, 'uploadProof'])->name('topups.uploadProof');
     Route::get('/topups/{id}/invoice', [TopUpController::class, 'generateInvoice'])->name('topups.invoice');
 
-
     // Route Admin
     Route::get('/admin/topups', [TopUpController::class, 'adminIndex'])->name('topups.admin_index');
     Route::patch('/topups/{topUp}/approve', [TopUpController::class, 'approve'])->name('topups.approve');
     Route::patch('/topups/{topUp}/reject', [TopUpController::class, 'reject'])->name('topups.reject');
-        
+
     Route::resource('payments', PaymentMethodController::class)->except(['show', 'edit', 'update']);
 
     Route::get('/customer/saldo', [TransactionController::class, 'saldoUser'])->name('transactions.index');
@@ -131,7 +128,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
     Route::get('/cek', [LeapYearController::class, 'index']);
     Route::post('/check', [LeapYearController::class, 'check']);
-    
+
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
     
    // Route untuk menampilkan halaman chat
@@ -143,5 +140,10 @@ Route::middleware(['auth', 'verified'])->group(function(){
     // Route untuk mengirim pesan
     Route::post('/messages', [MessageController::class, 'sendMessage'])->name('messages.send');
 
+
+    // TAK TAMBAH
+    Route::get('/barber/{barber}', [BarberController::class, 'showProfile'])->name('barber.profile');
+    Route::post('/follow-barber', [FollowerController::class, 'followBarber'])->name('follow.barber');
+    Route::post('/unfollow-barber/{barberId}', [FollowerController::class, 'unfollowBarber'])->name('unfollow.barber');
 
 });

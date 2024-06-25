@@ -79,4 +79,18 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    // TAK TAMBAH
+// Di dalam model Barber
+    public function followers()
+    {
+        return $this->hasMany(Follower::class, 'barber_id');
+    }
+
+// Di dalam model User
+    public function following()
+    {
+        return $this->hasMany(Follower::class, 'user_id');
+    }
+
 }

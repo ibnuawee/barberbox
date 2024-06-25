@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barber;
-use App\Models\Schedule;
 use App\Models\Booking;
+use App\Models\Schedule;
 use App\Models\Service;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +19,7 @@ class BarberController extends Controller
     }
     public function index(Request $request)
     {
-        if(Gate::denies('barber-booking')) {
+        if (Gate::denies('barber-booking')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $barber = Auth::user()->barber;
@@ -39,7 +38,7 @@ class BarberController extends Controller
             });
         }
 
-    $bookings = $query->paginate(10);
+        $bookings = $query->paginate(10);
         return view('barbers.index', compact('bookings'));
     }
 
@@ -70,7 +69,7 @@ class BarberController extends Controller
 
     public function setSchedule(Request $request)
     {
-        if(Gate::denies('barber-Setschedule')) {
+        if (Gate::denies('barber-Setschedule')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $validated = $request->validate([
@@ -100,13 +99,13 @@ class BarberController extends Controller
 
     public function Price(Request $request)
     {
-        if(Gate::denies('barber-price')) {
+        if (Gate::denies('barber-price')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $barber = Auth::user()->barber;
-        $allservices = Service::all(); 
+        $allservices = Service::all();
         $query = $barber->services()->withPivot('price');
-    
+
         if ($search = $request->input('search')) {
             $query->where('name', 'like', '%' . $search . '%');
         }
@@ -118,7 +117,7 @@ class BarberController extends Controller
 
     public function setPrice(Request $request)
     {
-        if(Gate::denies('barber-setprice')) {
+        if (Gate::denies('barber-setprice')) {
             abort(403, 'Anda tidak memiliki cukup hak akses');
         }
         $validated = $request->validate([
@@ -128,10 +127,37 @@ class BarberController extends Controller
 
         $barber = Auth::user()->barber;
         $barber->services()->syncWithoutDetaching([
-        $validated['service_id'] => ['price' => $validated['price']]
+            $validated['service_id'] => ['price' => $validated['price']],
         ]);
 
         return back()->with('success', 'Price set successfully for the service.');
+    }
+
+    // TAK TAMBAH
+    public function showProfile($barberId)
+    {
+        $barber = Barber::findOrFail($barberId);
+        $averageRating = $barber->ratings()->avg('rating'); // Menghitung rata-rata rating
+    
+        return view('bookings.profile', compact('barber', 'averageRating'));
+    }
+    
+
+    // rata2 ratings
+    public function show($id)
+    {
+        // Mengambil booking dengan relasi ke barber, user barber, services barber, dan ratings barber
+        $booking = Booking::with('barber.user', 'barber.services', 'barber.ratings.user')->findOrFail($id);
+
+        $barber = $booking->barber;
+        $averageRating = $barber->ratings->avg('rating');
+
+        // Menghitung rating rata-rata untuk setiap layanan
+        foreach ($barber->services as $service) {
+            $service->average_rating = $service->ratings->avg('rating');
+        }
+
+        return view('bookings.show', compact('barber', 'averageRating', 'booking'));
     }
 
 }

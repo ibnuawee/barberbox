@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Barber;
 use App\Models\Follower;
 use App\Models\User;
-use App\Models\Barber;
+use Illuminate\Http\Request;
 
 class FollowerController extends Controller
 {
@@ -49,4 +49,34 @@ class FollowerController extends Controller
         $following = User::find($user_id)->barbers;
         return response()->json($following, 200);
     }
+
+    // tak tambah
+    public function followBarber(Request $request)
+    {
+        $follower = new Follower([
+            'user_id' => auth()->id(),
+            'barber_id' => $request->barber_id,
+        ]);
+        $follower->save();
+
+        // Increment followers count
+        $barber = Barber::find($request->barber_id);
+        $barber->increment('followers_count');
+
+        return back()->with('success', 'You are now following this barber.');
+    }
+
+    public function unfollowBarber($barberId)
+    {
+        Follower::where('user_id', auth()->id())
+            ->where('barber_id', $barberId)
+            ->delete();
+
+        // Decrement followers count
+        $barber = Barber::find($barberId);
+        $barber->decrement('followers_count');
+
+        return back()->with('success', 'You have unfollowed this barber.');
+    }
+
 }

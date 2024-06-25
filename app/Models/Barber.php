@@ -35,9 +35,22 @@ class Barber extends Model
         return $this->belongsToMany(User::class, 'followers');
     }
 
+    // TAK TAMBAH
+    // follower
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'barber_id', 'user_id');
+    }
+
+    // rata2 rating
     public function ratings()
     {
         return $this->hasMany(Rating::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
     }
 
 }
