@@ -17,14 +17,27 @@ class TransactionController extends Controller
         return view('transactions.index', compact('transactions'));
     }
 
-    public function saldoBarber()
-    {
-        if(Gate::denies('barber-saldo')) {
-            abort(403, 'Anda tidak memiliki cukup hak akses');
-        }
-        $transactions = Transaction::where('user_id', Auth::id())->paginate(10);
-        return view('barbers.saldo', compact('transactions'));
+    public function saldoBarber(Request $request)
+{
+    if (Gate::denies('barber-saldo')) {
+        abort(403, 'Anda tidak memiliki cukup hak akses');
     }
+
+    $search = $request->input('search');
+
+    $transactions = Transaction::where('user_id', Auth::id())
+        ->when($search, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('type', 'like', '%' . $search . '%')
+                    ->orWhere('amount', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhere('created_at', 'like', '%' . $search . '%');
+            });
+        })->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    return view('barbers.saldo', compact('transactions'));
+}
 
     public function saldoAdmin(Request $request)
     {

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LeapYearController;
 use App\Http\Controllers\MessageController;
+use Illuminate\Support\Facades\Redirect;
 
 Route::get('/', function () {
     return view('landingpage.index');
@@ -32,7 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function(){
         $user = Auth::user();
         if ($user->role == 'user') {
             return redirect()->route('landingpage.index');
-        } elseif (in_array($user->role, ['barber', 'admin'])) {
+        } elseif ($user->role =='barber') {
+            return redirect()->route('barber.dashboard');
+        } elseif ($user->role =='admin') {
             return view('dashboard.home');
         } else {
             abort(403, 'Unauthorized action.');
@@ -79,10 +82,12 @@ Route::middleware(['auth', 'verified'])->group(function(){
     // Route untuk barber
         
     // Tambahkan route untuk fitur barber di sini
-    Route::get('/barber', [BarberController::class, 'index'])->name('barber.index');
+    Route::get('/barber/dashboard', [BarberController::class, 'dashboard'])->name('barber.dashboard');
+    Route::get('/barber/booking', [BarberController::class, 'index'])->name('barber.index');
     Route::get('/barber/schedule', [BarberController::class, 'schedule'])->name('barber.schedule');
     // Route::post('/barber/set-schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
     Route::post('/barber/schedule', [BarberController::class, 'setSchedule'])->name('barber.setSchedule');
+    Route::delete('/barber/schedule/{id}', [BarberController::class, 'destroy'])->name('schedule.destroy');
     Route::get('/barber/price', [BarberController::class, 'Price'])->name('barber.Price');
     Route::post('/barber/price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
 
@@ -126,7 +131,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
 
     Route::get('/cek', [LeapYearController::class, 'index']);
     Route::post('/check', [LeapYearController::class, 'check']);
-
     
     Route::post('/ratings', [RatingController::class, 'store'])->name('ratings.store');
     
