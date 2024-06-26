@@ -52,9 +52,16 @@ class BookingController extends Controller
             'haircut_name' => 'required|string',
             'booking_date' => 'required|date|after:now',
             'gender' => 'required|string|in:pria,wanita',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
+        /** @var \App\Models\User $user **/
         $user = Auth::user();
+        $user->update([
+            'latitude' => $validated['latitude'],
+            'longitude' => $validated['longitude'],
+        ]);
         $barber = Barber::findOrFail($validated['barber_id']);
         $service = $barber->services()->where('service_id', $validated['service_id'])->first();
 
@@ -265,6 +272,14 @@ class BookingController extends Controller
         }
 
         return redirect()->route('barber.index', $booking->id)->with('success', 'Booking cancelled and balance returned to user.');
+    }
+
+    public function showRoute(Booking $booking)
+    {
+        $user = Auth::user();
+        $barber = $booking->barber;
+
+        return view('bookings.rute', compact('user', 'barber'));
     }
 
 

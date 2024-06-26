@@ -34,7 +34,7 @@
     <!-- CSS Libraries -->
     @stack('customCss')
 
-    @vite(['resources/js/app.js'])
+    
 </head>
 
 <body>

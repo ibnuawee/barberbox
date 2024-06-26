@@ -24,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
         'barber-price' => ['barber'],
         'barber-setprice' => ['barber'],
         'barber-saldo' => ['barber'],
+        'barber-laporan' => ['barber'],
         'admin-saldo' => ['admin'],
         'kelola-topup' => ['admin'],
     ];

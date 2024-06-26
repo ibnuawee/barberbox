@@ -5,3 +5,7 @@
     <chat-component :user-id="{{ auth()->user()->id }}" :receiver-id="{{ $receiver_id }}"></chat-component>
 </div>
 @endsection
+
+@push('customJs')
+@vite(['resources/js/app.js'])
+@endpush

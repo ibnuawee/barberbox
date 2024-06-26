@@ -55,6 +55,13 @@
         </li>
         @endcan
 
+        @can('barber-laporan')
+        <li class="menu-header">Laporan</li>
+        <li class="nav-item dropdown">
+            <a href="{{route('barber.report')}}" class="nav-link"><i class="fas fa-comment-dollar"></i><span>Laporan</span></a>
+        </li>
+        @endcan
+
         @can('index-article')
 
         <li class="nav-item dropdown">

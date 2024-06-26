@@ -40,6 +40,10 @@
                         <h6 class="text-uppercase mb-0">Harga</h6>
                         <span class="text-uppercase">{{ $booking->total_price }}</span>
                     </div>
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <h6 class="text-uppercase mb-0">Rute</h6>
+                        <span class="text-uppercase"><a href="{{route('booking.route', ['booking' => $booking->id])}}">Rute Lokasi Barbershop</a></span>
+                    </div>
                     <div class="d-flex justify-content-between py-2">
                         <h6 class="text-uppercase mb-0">Status</h6>
                         <span class="text-uppercase text-primary">

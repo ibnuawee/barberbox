@@ -77,6 +77,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/booking/{booking}/complete', [BookingController::class, 'complete'])->name('booking.complete');
     Route::post('/booking/{booking}/confirm', [BookingController::class, 'confirm'])->name('booking.confirm');
     Route::post('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+    Route::get('/booking/{booking}/route', [BookingController::class, 'showRoute'])->name('booking.route');
+
 
     // Route untuk barber
 
@@ -89,6 +91,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/barber/schedule/{id}', [BarberController::class, 'destroy'])->name('schedule.destroy');
     Route::get('/barber/price', [BarberController::class, 'Price'])->name('barber.Price');
     Route::post('/barber/price', [BarberController::class, 'setPrice'])->name('barber.setPrice');
+    Route::get('/barber/report', [BarberController::class, 'report'])->name('barber.report');
+    Route::get('/barber/location', [BarberController::class, 'location'])->name('barber.location');
+    Route::post('/barber/updateLocation', [BarberController::class, 'updateLocation'])->name('barber.updateLocation');
 
     // Route Artikel
     Route::resource('articles', ArticleController::class);
