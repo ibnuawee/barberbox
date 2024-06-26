@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Barber extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id','latitude', 'longitude'];
 
     public function user()
     {

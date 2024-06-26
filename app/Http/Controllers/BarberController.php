@@ -6,10 +6,13 @@ use App\Models\Barber;
 use App\Models\Booking;
 use App\Models\Schedule;
 use App\Models\Service;
+use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class BarberController extends Controller
 {
@@ -160,4 +163,83 @@ class BarberController extends Controller
         return view('bookings.show', compact('barber', 'averageRating', 'booking'));
     }
 
+    public function report(Request $request)
+    {
+        $barber = Auth::user()->barber;
+
+        $filter = $request->input('filter', 'daily'); // Default filter is daily
+        $date = Carbon::now();
+
+        switch ($filter) {
+            case 'daily':
+                $startDate = $date->copy()->startOfDay();
+                $endDate = $date->copy()->endOfDay();
+                break;
+            case 'weekly':
+                $startDate = $date->copy()->startOfWeek();
+                $endDate = $date->copy()->endOfWeek();
+                break;
+            case 'monthly':
+                $startDate = $date->copy()->startOfMonth();
+                $endDate = $date->copy()->endOfMonth();
+                break;
+            case 'yearly':
+                $startDate = $date->copy()->startOfYear();
+                $endDate = $date->copy()->endOfYear();
+                break;
+            default:
+                $startDate = $date->copy()->startOfDay();
+                $endDate = $date->copy()->endOfDay();
+                break;
+        }
+
+        Log::info('Start Date: ' . $startDate);
+        Log::info('End Date: ' . $endDate);
+
+        $bookings = Booking::where('barber_id', $barber->id)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+        
+        Log::info('Bookings: ' . $bookings);
+
+        $totalBookings = $bookings->count();
+        $successfulBookings = $bookings->where('status', 'success')->count();
+        $pendingBookings = $bookings->where('status', 'pending')->count();
+        $canceledBookings = $bookings->where('status', 'cancelled')->count();
+        $totalEarnings = $bookings->where('status', 'success')->sum('total_price');
+
+        // Mengambil pengaturan biaya admin
+        $settings = Setting::first();
+        $adminFeePercentage = $settings ? $settings->admin_fee_percentage : 0;
+        $netEarnings = $totalEarnings - ($totalEarnings * ($adminFeePercentage / 100));
+
+        Log::info('Total Bookings: ' . $totalBookings);
+        Log::info('Successful Bookings: ' . $successfulBookings);
+        Log::info('Pending Bookings: ' . $pendingBookings);
+        Log::info('Canceled Bookings: ' . $canceledBookings);
+        Log::info('Total Earnings: ' . $totalEarnings);
+        Log::info('Net Earnings (after admin fee): ' . $netEarnings);
+
+        return view('barbers.laporan', compact('totalBookings', 'successfulBookings', 'pendingBookings', 'canceledBookings', 'totalEarnings', 'netEarnings', 'filter'));
+    }
+
+    public function location()
+    {
+        return view('barbers.lokasi');
+    }
+
+    public function updateLocation(Request $request)
+    {
+        $validated = $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        $barber = Auth::user()->barber;
+        $barber->latitude = $request->latitude;
+        $barber->longitude = $request->longitude;
+        $barber->save();
+
+        return back()->with('success', 'Location updated successfully.');
+    }
 }
