@@ -36,5 +36,5 @@
         }
     </script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhcKiFZUJKJqVrCQKAL_BGk2SKaCm7fxY&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"></script>
 @endsection
