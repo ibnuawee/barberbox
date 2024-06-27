@@ -95,7 +95,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhcKiFZUJKJqVrCQKAL_BGk2SKaCm7fxY&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap" async defer></script>
     <script>
         var barbers = @json($barbers);
 
